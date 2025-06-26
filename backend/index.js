@@ -4,15 +4,15 @@ const cors = require("cors");
 var { ncrypt } = require("ncrypt-js");
 const { capitalize } = require("./utils");
 
-require("dotenv").config(); 
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || process.env.DEVELOPMENT_PORT;
 const secretKey = process.env.ENCRYPT_DECRYPT_KEY;
 const uri = process.env.MONGODB_URI;
 const mongoAdminConfigID = process.env.ADMIN_CONFIG_ID;
-const devURL = process.env.DEV_URL
-const environment = process.env.NODE_ENV
+const devURL = process.env.DEV_URL;
+const environment = process.env.NODE_ENV;
 
 // Middleware
 app.use(cors());
@@ -271,15 +271,22 @@ app.put("/form/update", async (_, res) => {
 	}
 });
 
-// Connect to MongoDB and start server
-mongoose
-	.connect(uri)
-	.then(() => {
-		console.log("Connected to MongoDB");
+async function startServer() {
+	try {
+		if (!uri) throw new Error("MongoDB URI is undefined");
+
+		await mongoose.connect(uri);
+		console.log("✅ Connected to MongoDB");
+
 		app.listen(port, () => {
-			console.log(`Express server running on ${environment} environment through ${devURL}${port}`);
+			console.log(
+				`🚀 Server running in ${environment} at ${devURL}${port}`,
+			);
 		});
-	})
-	.catch((err) => {
-		console.error("Failed to connect to MongoDB", err);
-	});
+	} catch (err) {
+		console.error("❌ Server failed to start:", err.message);
+		process.exit(1); // Stop process on failure
+	}
+}
+
+startServer();
