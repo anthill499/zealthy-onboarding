@@ -11,6 +11,9 @@ const port = process.env.DEVELOPMENT_PORT;
 const secretKey = process.env.ENCRYPT_DECRYPT_KEY;
 const uri = process.env.MONGODB_URI;
 const mongoAdminConfigID = process.env.ADMIN_CONFIG_ID;
+const devURL = process.env.DEV_URL
+const environment = process.env.NODE_ENV
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -274,7 +277,7 @@ mongoose
 	.then(() => {
 		console.log("Connected to MongoDB");
 		app.listen(port, () => {
-			console.log(`Server running on http://localhost:${port}`);
+			console.log(`Server running on ${devURL}${port}`);
 		});
 	})
 	.catch((err) => {
