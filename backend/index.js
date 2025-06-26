@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.DEVELOPMENT_PORT;
 const secretKey = process.env.ENCRYPT_DECRYPT_KEY;
 const uri = process.env.MONGODB_URI;
-
+const mongoAdminConfigID = process.env.ADMIN_CONFIG_ID;
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -242,7 +242,7 @@ app.put("/form/update", async (_, res) => {
 		} = req.body;
 		const updatedConfig = await FormComponent.findOneAndUpdate(
 			{
-				_id: "685b38f26689b6e66720443b",
+				_id: mongoAdminConfigID,
 			},
 			{
 				aboutMe,
