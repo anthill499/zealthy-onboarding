@@ -4,10 +4,10 @@ const cors = require("cors");
 var { ncrypt } = require("ncrypt-js");
 const { capitalize } = require("./utils");
 
-require("dotenv").config(); // optional if using .env for secrets
+require("dotenv").config(); 
 
 const app = express();
-const port = process.env.DEVELOPMENT_PORT;
+const port = process.env.PORT || process.env.DEVELOPMENT_PORT;
 const secretKey = process.env.ENCRYPT_DECRYPT_KEY;
 const uri = process.env.MONGODB_URI;
 const mongoAdminConfigID = process.env.ADMIN_CONFIG_ID;
@@ -277,7 +277,7 @@ mongoose
 	.then(() => {
 		console.log("Connected to MongoDB");
 		app.listen(port, () => {
-			console.log(`Server running on ${devURL}${port}`);
+			console.log(`Express server running on ${environment} environment through ${devURL}${port}`);
 		});
 	})
 	.catch((err) => {
