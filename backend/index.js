@@ -11,7 +11,8 @@ const port = process.env.PORT || process.env.DEVELOPMENT_PORT;
 const secretKey = process.env.ENCRYPT_DECRYPT_KEY;
 const uri = process.env.MONGODB_URI;
 const mongoAdminConfigID = process.env.ADMIN_CONFIG_ID;
-const devURL = process.env.DEV_URL;
+const localDomain = process.env.DEV_URL;
+const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN;
 const environment = process.env.NODE_ENV;
 
 // Middleware
@@ -274,13 +275,11 @@ app.put("/form/update", async (_, res) => {
 async function startServer() {
 	try {
 		if (!uri) throw new Error("MongoDB URI is undefined");
-
 		await mongoose.connect(uri);
 		console.log("✅ Connected to MongoDB");
-
 		app.listen(port, () => {
 			console.log(
-				`🚀 Server running in ${environment} at ${devURL}${port}`,
+				`🚀 Server running in ${environment} at ${environment === 'production' ? publicDomain : localDomain}${port}`,
 			);
 		});
 	} catch (err) {
