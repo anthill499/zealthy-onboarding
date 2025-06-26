@@ -1,0 +1,221 @@
+/* 1. Use a more-intuitive box-sizing model */
+body,
+html {
+	height: 100%;
+	margin: 0;
+}
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* 2. Remove default margin */
+* {
+	margin: 0;
+}
+
+table,
+th,
+td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	padding: 8px;
+	word-break: break-all;
+}
+
+tr:first-child {
+	background-color: #c8c8c8;
+}
+
+tr:not(:first-child):hover {
+	background-color: #bebebe;
+}
+
+/* 3. Enable keyword animations */
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		interpolate-size: allow-keywords;
+	}
+}
+
+body {
+	/* 4. Add accessible line-height */
+	line-height: 1.5;
+	/* 5. Improve text rendering */
+	-webkit-font-smoothing: antialiased;
+	font-family: "Trebuchet MS", sans-serif;
+}
+
+/* 6. Improve media defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+/* 7. Inherit fonts for form controls */
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+/* 8. Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	overflow-wrap: break-word;
+}
+
+/* 9. Improve line wrapping */
+p {
+	text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	text-wrap: balance;
+}
+
+/*
+  10. Create a root stacking context
+*/
+#root,
+#__next {
+	isolation: isolate;
+}
+
+nav {
+	border: none;
+	position: absolute;
+	width: 100%;
+	height: 5vh;
+	background-color: rgb(242, 242, 242);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px;
+	outline: 1px solid black
+}
+
+.container {
+	display: flex;
+	height: 100vh;
+	width: 100vw;
+}
+
+.card-container {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.card {
+	display: flex;
+	outline: 1px solid rgb(154, 154, 154);
+	padding: 24px;
+	min-width: 400px;
+	border-radius: 8px;
+}
+
+.card,
+.card > form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+}
+
+.card-header-button:hover {
+	cursor: pointer;
+	background-color: #fff;
+}
+
+.button-group {
+	display: flex;
+	justify-content: space-between;
+}
+
+.button-group > button {
+	width: 45%;
+}
+
+.text-group > input,
+.text-group > textarea {
+	width: 100%;
+}
+
+button {
+	border-radius: 8px;
+	border: none;
+	outline: 0.5px solid grey;
+}
+
+button:hover {
+	cursor: grab;
+}
+
+textarea {
+	border: none;
+	outline: 0.5px solid black;
+}
+
+input,
+textarea {
+	padding: 12px;
+	overflow-wrap: inherit;
+}
+
+.state-city-zipcode {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-column: 100%;
+	column-gap: 12px;
+	row-gap: 8px;
+}
+
+.state-city-zipcode-column {
+	display: flex;
+	flex-direction: column;
+	width: auto;
+}
+
+.state-city-zipcode-column > * {
+	height: 100%;
+}
+
+.description-span {
+	color: rgb(119, 119, 119);
+}
+
+.form-errors {
+	width: 100%;
+	background-color: rgb(255, 202, 202);
+	margin: 4px 0px 4px 0px;
+}
+
+.checkbox-input {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
