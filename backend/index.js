@@ -7,12 +7,9 @@ const { capitalize } = require("./utils");
 require("dotenv").config(); // optional if using .env for secrets
 
 const app = express();
-const port = 3000;
-const secretKey = "my-secret-key-for-this-take-home";
-
-// Replace with your MongoDB URI
-const uri =
-	"mongodb+srv://anthill499:3w4494JzUIXeH4ro@zealthyfreecluster.5tk5hwe.mongodb.net/myDatabase?retryWrites=true&w=majority&appName=zealthyfreecluster";
+const port = process.env.DEVELOPMENT_PORT;
+const secretKey = process.env.ENCRYPT_DECRYPT_KEY;
+const uri = process.env.MONGODB_URI;
 
 // Middleware
 app.use(cors());
