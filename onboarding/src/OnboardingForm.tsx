@@ -30,7 +30,7 @@ function OnboardingForm(): ReactElement {
 	const [cpassword, setCPassword] = useState("");
 	const [errors, setErrors] = useState<ErrorState>(defaultErrors);
 	const {StepperComponent} = useFormStepper();
-
+	const {fullURL} = useAuthConfig()
 	const verifyFields = () => {
 		const newErrors: ErrorState = {
 			firstNameErrors: [],
@@ -75,14 +75,14 @@ function OnboardingForm(): ReactElement {
 	};
 
 	const onSubmit = async (
-		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+		_: React.MouseEvent<HTMLButtonElement, MouseEvent>,
 	) => {
 		if (!verifyFields()) {
 			return;
 		}
 
 		const isAdmin = email.endsWith("@zealthy.com");
-		const URL = "http://localhost:3000/user/create";
+		const URL = fullURL("user/create");
 		const response = await fetch(URL, {
 			method: "POST",
 			headers: {

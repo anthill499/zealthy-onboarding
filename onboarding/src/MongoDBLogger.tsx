@@ -2,6 +2,7 @@ import { ReactElement, useState, useEffect } from "react";
 import Container from "./Container";
 import Card from "./components/Card";
 import Brightness1Icon from "@mui/icons-material/Brightness1";
+import { useAuthConfig } from "./context/AuthConfigContext";
 
 interface ResponseState {
     ok: boolean;
@@ -12,20 +13,20 @@ interface ResponseState {
     message: string;
 }
 
-const URL = "http://localhost:3000/ping";
 
 function MongoDBLogger(): ReactElement {
+    const {fullURL} = useAuthConfig()
     const [response, setResponse] = useState<ResponseState>({
         ok: false,
         status: 404,
         statusText: "Express HTTP Server not started",
-        url: URL,
+        url: fullURL("ping"),
         type: "N/A",
         message: "Connection Refused",
     });
-
+    
     const pingBackend = async () => {
-        const response: Response = await fetch(URL);
+        const response: Response = await fetch(fullURL("ping"));
         const message = await response.text();
         if (!response.ok) {
             return;

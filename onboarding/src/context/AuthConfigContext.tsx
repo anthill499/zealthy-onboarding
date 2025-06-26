@@ -54,6 +54,7 @@ type AuthConfigContextType = {
 	updateConfig: (newConfig: Partial<FormAdminConfig>) => void;
 	saveAdminConfigChangesAsync: () => void;
 	autoSaveOnUnmount: (data: User) => void;
+	fullURL: (path: string) => string;
 };
 
 type ConfigFetchQueryResponseType = {
@@ -80,6 +81,7 @@ const defaultAdminConfigState: FormAdminConfig = {
 
 // Provider component
 export const AuthConfigProvider = ({ children }: { children: ReactNode }) => {
+	const {VITE_SERVER_PUBLIC_DOMAIN, VITE_DEV_URL, VITE_DEVELOPMENT_PORT, MODE, BASE_URL} = import.meta.env
 	let navigate = useNavigate();
 	// Config settings
 	const [adminConfig, setConfig] = useState<FormAdminConfig>(
@@ -99,8 +101,15 @@ export const AuthConfigProvider = ({ children }: { children: ReactNode }) => {
 		});
 	};
 
+	const domain: string = MODE === 'production' ? VITE_SERVER_PUBLIC_DOMAIN : VITE_DEV_URL+VITE_DEVELOPMENT_PORT
+	const fullURL = (path: string): string => {
+		const concatenatedURL = domain + "/" + path
+		console.log({BASE_URL, MODE, domain, path, concatenatedURL, VITE_DEV_URL, VITE_DEVELOPMENT_PORT, VITE_SERVER_PUBLIC_DOMAIN})
+		return concatenatedURL
+	}
+
 	const createOrFetchConfig = async () => {
-		const response = await fetch("http://localhost:3000/form/create", {
+		const response = await fetch(fullURL("form/create"), {
 			method: "POST",
 		});
 		const responseJson: ConfigFetchQueryResponseType = await response.json();
@@ -114,7 +123,7 @@ export const AuthConfigProvider = ({ children }: { children: ReactNode }) => {
 
 	// Onboarding AutosAVE
 	const autoSaveOnUnmount = async (data: User) => {
-		const res = await fetch("http://localhost:3000/user/update", {
+		const res = await fetch(fullURL("user/update"), {
 			method: "PUT",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(data),
@@ -129,7 +138,7 @@ export const AuthConfigProvider = ({ children }: { children: ReactNode }) => {
 
 		// Onboarding AutosAVE
 	const saveAdminConfigChangesAsync = async () => {
-		const res = await fetch("http://localhost:3000/form/update", {
+		const res = await fetch(fullURL("form/update"), {
 			method: "PUT",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(adminConfig),
@@ -150,7 +159,7 @@ export const AuthConfigProvider = ({ children }: { children: ReactNode }) => {
 			passwordErrors: string[];
 		}) => void,
 	) => {
-		const res = await fetch("http://localhost:3000/user/signin", {
+		const res = await fetch(fullURL("user/signin"), {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ email, password }),
@@ -181,6 +190,7 @@ export const AuthConfigProvider = ({ children }: { children: ReactNode }) => {
 				updateConfig,
 				saveAdminConfigChangesAsync,
 				autoSaveOnUnmount,
+				fullURL
 			}}
 		>
 			{children}

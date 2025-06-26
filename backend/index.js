@@ -9,7 +9,7 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || process.env.DEVELOPMENT_PORT;
 const secretKey = process.env.ENCRYPT_DECRYPT_KEY;
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI || process.env.DEV_MONGODB_URI;
 const mongoAdminConfigID = process.env.ADMIN_CONFIG_ID;
 const localDomain = process.env.DEV_URL;
 const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN;
@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // ******* Mongoose Schema + Model *******
-const TestUser = new mongoose.Schema({
+const UserModel = new mongoose.Schema({
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	onboardingStep: { type: String, required: true },
@@ -49,7 +49,7 @@ const FormComponentModel = new mongoose.Schema({
 
 // ***************************************
 const FormComponent = mongoose.model("FormComponent", FormComponentModel);
-const User = mongoose.model("User", TestUser);
+const User = mongoose.model("User", UserModel);
 
 // Ping
 app.get("/ping", (_, res) => {
@@ -58,7 +58,7 @@ app.get("/ping", (_, res) => {
 
 // Get all users
 app.get("/users/all", async (_, res) => {
-	const users = await User.find();
+	const users = await User.find().exec();
 	res.json({ users });
 });
 
@@ -272,20 +272,16 @@ app.put("/form/update", async (_, res) => {
 	}
 });
 
-async function startServer() {
-	try {
-		if (!uri) throw new Error("MongoDB URI is undefined");
-		await mongoose.connect(uri);
-		console.log("✅ Connected to MongoDB");
-		app.listen(port, () => {
-			console.log(
-				`🚀 Server running in ${environment} at ${environment === 'production' ? publicDomain : localDomain}${port}`,
-			);
-		});
-	} catch (err) {
-		console.error("❌ Server failed to start:", err.message);
-		process.exit(1); // Stop process on failure
-	}
-}
+if (!uri) throw new Error("MongoDB URI is undefined");
+mongoose
+	.connect(uri)
+	.then(() => console.log("✅ Connected to MongoDB"))
+	.catch((err) => console.err(err));
 
-startServer();
+app.listen(port, () => {
+	console.log(
+		`🚀 Server running in ${environment} at ${
+			environment === "production" ? publicDomain : localDomain
+		}${port}`,
+	);
+});

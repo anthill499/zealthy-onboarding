@@ -9,7 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { User } from "./context/AuthConfigContext";
+import { useAuthConfig, User } from "./context/AuthConfigContext";
 import { TablePagination } from "@mui/material";
 interface UserData {
 	_id?: string;
@@ -34,14 +34,14 @@ function DataTable() {
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(0);
 	const rowsPerPage = 5;
+	const {fullURL} = useAuthConfig()
 
 	useEffect(() => {
 		const fetchUsers = async () => {
-			const URL = "http://localhost:3000/users/all";
+			const URL = fullURL("users/all");
 			const response = await fetch(URL, {
 				method: "GET",
 			});
-
 			if (!response.ok) {
 				setData([]);
 				return;

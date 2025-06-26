@@ -12,22 +12,21 @@ import { RequireAuth } from "./RequireAuth.js";
 import RequireNoAuth from "./RequireNoAuth.js";
 
 function RouterFunctionalComponent(): ReactElement {
-
 	return (
 		<Routes>
-			<Route path='/'  element={<App />} />
-            <Route element={<RequireNoAuth />}>
-                <Route path='/signin' element={<SignIn />} />
-                <Route path='/signup' element={<OnboardingForm />} />
+			<Route path='/' element={<App />} />
+			<Route element={<RequireNoAuth />}>
+				<Route path='/signin' element={<SignIn />} />
+				<Route path='/signup' element={<OnboardingForm />} />
 			</Route>
 			{/* Protected routes */}
 			<Route element={<RequireAuth />}>
-				<Route path='/dblog' element={<MongoDBLogger />} />
 				<Route path='/about' element={<AboutMe />} />
 				<Route path='/address' element={<Address />} />
-            	<Route path='/admin' element={<Admin />} />
 			</Route>
-            <Route path='/table' element={<DataTable />} />
+			<Route path='/dblog' element={<MongoDBLogger />} />
+			<Route path='/admin' element={<Admin />} />
+			<Route path='/table' element={<DataTable />} />
 			<Route path='*' element={<Navigate to='/' replace />} />
 		</Routes>
 	);
